@@ -2,9 +2,12 @@ const express = require("express");
 const app = express();
 const noteModel = require("./Models/note.model.js");
 const cors = require("cors");
+const path = require("path");
+
 app.use(cors());
 
 app.use(express.json());
+app.use(express.static("./public"));
 
 //Routes
 // Create Route
@@ -109,6 +112,10 @@ app.put("/api/note/:id", async (req, res) => {
       error,
     });
   }
+});
+
+app.use("*name", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "/public/index.html"));
 });
 
 module.exports = app;
