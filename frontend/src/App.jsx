@@ -1,34 +1,45 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 const App = () => {
-  const [notes, setNotes] = useState([
-    {
-      title: "test title 1 ",
-      description: "test description",
-    },
-    {
-      title: "test title 2",
-      description: "test description",
-    },
-    {
-      title: "test title 3",
-      description: "test description",
-    },
-    {
-      title: "test title 4",
-      description: "test description",
-    },
-  ]);
+  const [notes, setNotes] = useState([]);
 
-  axios.get("http://localhost:3000/api/note").then((res) => {
-    console.log(res);
+  function fetchNote() {
+    axios.get("http://localhost:3000/api/note").then((res) => {
+      setNotes(res.data.note);
+      console.log("hellow word");
+    });
+  }
 
-    setNotes(res.data.note);
-  });
+  useEffect(() => {
+    fetchNote();
+  }, []);
 
+  //SubmitHandler
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const { title, discription } = e.target.elements;
+    console.log(title.value, discription.value);
+
+    axios
+      .post("http://localhost:3000/api/note", {
+        title: title.value,
+        discription: discription.value,
+      })
+      .then((res) => {
+        console.log(res.data);
+      });
+  }
   return (
     <>
+      <form onSubmit={handleSubmit} className="note-created-form">
+        <input type="text" name="title" placeholder="Enter Title" />
+        <input type="text" name="discription" placeholder="Enter Discription" />
+        <button>Add Note</button>
+      </form>
+
+      {/* Created Note */}
       <div className="notes">
         {notes.map((note) => {
           return (
