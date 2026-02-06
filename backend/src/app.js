@@ -7,7 +7,6 @@ const path = require("path");
 app.use(cors());
 app.use(express.json());
 app.use(express.static("./public"));
-
 // Create Route
 app.post("/api/note", async (req, res) => {
   const { title, discription } = req.body;
